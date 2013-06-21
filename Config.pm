@@ -17,16 +17,16 @@
 # Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   YOUR NAME <YOUR EMAIL ADDRESS>
+#   Graham THE Ollis <plicease@cpan.org>
 
 package Bugzilla::Extension::GitId;
 use strict;
 
 use constant NAME => 'GitId';
 
-use constant REQUIRED_MODULES => [ qw(
-  YAML
-)];
+use constant REQUIRED_MODULES => [
+  { package => 'YAML', module => 'YAML', version => 0, },
+];
 
 use constant OPTIONAL_MODULES => [
 ];

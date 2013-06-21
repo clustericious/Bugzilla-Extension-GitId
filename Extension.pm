@@ -21,18 +21,25 @@
 
 package Bugzilla::Extension::GitId;
 
+use warnings;
 use strict;
+use v5.10;
 use base qw(Bugzilla::Extension);
 use Bugzilla::Util qw(html_quote);
 use YAML ();
 
 our $VERSION = '0.01';
 
-# See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook" 
-# in the bugzilla directory) for a list of all available hooks.
-sub install_update_db
+sub _config
 {
-  my ($self, $args) = @_;
+  state $config;
+  
+  unless(defined $config)
+  {
+    $config = YAML::LoadFile($ENV{BUGZILLA_EXTENSION_GITID} // '/etc/gitid.yml');
+  }
+  
+  return $config;
 }
 
 sub bug_format_comment
@@ -42,10 +49,13 @@ sub bug_format_comment
   push @{ $args->{'regexes'} }, {
     match   => qr{\bgit commit (\S+) ([0-9a-f]{40})\b},
     replace => sub {
-      my($args)  = @_;
-      my $name   = html_quote $args->{matches}->[0];
-      my $git_id = $args->{matches}->[1];
-      return qq{git commit <a href="http://foo.com/$name">$name</a> <a href="http://foo.com/$name/$git_id">$git_id</a>};
+      my($args)      = @_;
+      my $name       = html_quote $args->{matches}->[0];
+      my $git_id     = $args->{matches}->[1];
+      my $commit_url = _config->{urls}->{$name}->{commit};
+      my $repo_url   = _config->{urls}->{$name}->{repo};
+      return qq{git commit $name $git_id [ ERROR BAD COMPONENT ]} unless defined $commit_url && defined $repo_url;
+      return qq{git commit <a href="$repo_url" target="_blank">$name</a> <a href="$commit_url/$git_id" target="_blank">$git_id</a>};
     },
   };
 }
