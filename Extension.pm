@@ -26,6 +26,7 @@ use strict;
 use v5.10;
 use base qw(Bugzilla::Extension);
 use Bugzilla::Util qw(html_quote);
+use File::stat qw( stat );
 use YAML ();
 
 our $VERSION = '0.01';
@@ -33,10 +34,15 @@ our $VERSION = '0.01';
 sub _config
 {
   state $config;
+  state $filename = $ENV{BUGZILLA_EXTENSION_GITID} // '/etc/gitid.yml';
+  state $timestamp;
   
-  unless(defined $config)
+  my $new_timestamp = stat($filename)->mtime;
+  
+  if((!defined $config) || $new_timestamp != $timestamp)
   {
-    $config = YAML::LoadFile($ENV{BUGZILLA_EXTENSION_GITID} // '/etc/gitid.yml');
+    $config = YAML::LoadFile($filename);
+    $timestamp = $new_timestamp;
   }
   
   return $config;
