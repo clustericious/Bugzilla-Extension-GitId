@@ -29,7 +29,7 @@ use Bugzilla::Util qw(html_quote);
 use File::stat qw( stat );
 use YAML ();
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub _config
 {
