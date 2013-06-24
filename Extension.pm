@@ -31,7 +31,7 @@ use YAML ();
 
 =head1 NAME
 
-Bugzilla::Extension::GitId
+Bugzilla::Extension::GitId - add git links to your bugzilla comments
 
 =head1 SYNOPSIS
 
