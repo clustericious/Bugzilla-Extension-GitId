@@ -1,0 +1,54 @@
+=head1 NAME
+
+Bugzilla::Extension::GitId
+
+=head1 SYNOPSIS
+
+Unpack this extension into your bugzilla extension directory:
+
+ % cd $BUGZILLA/extensions
+ % git clone https://github.com/plicease/Bugzilla-Extension-GitId.git GitId
+
+Create a /etc/gitid.yml file that configures the extension
+
+ ---
+ url:
+   # this example works for github
+   # this example uses the GitId extension's git repo
+   Bugzilla-Extension-GitId:
+     repo: https://github.com/plicease/Bugzilla-Extension-GitId
+     # for commit %s is replaced by the git commit id
+     commit: https://github.com/plicease/Bugzilla-Extension-GitId/commit/%s
+     # for branch %s is replaced by the branch name
+     branch: https://github.com/plicease/Bugzilla-Extension-GitId/tree/%s
+     # for tag %s is replaced by the tag name
+     tag: https://github.com/plicease/Bugzilla-Extension-GitId/tree/%s
+
+If you don't have write access to /etc/gitid.yml, and set
+BUGZILLA_EXTENSION_GITID_CONF in your httpd.conf:
+
+ SetEnv BUGZILLA_EXTENSION_GITID_CONF /home/ollisg/etc/gitid.yml
+
+=head1 DESCRIPTION
+
+This extension adds links for comments like these:
+
+ git commit Bugzilla-Extension-GitId 09212c6c6f34733552e6b5970353c4dfea3cf720
+ git tag Bugzilla-Extension-GitId 0.03
+ git branch Bugzilla-Extension-GitId master
+
+=head1 SEE ALSO
+
+L<Bugzilla>
+
+=head1 AUTHOR
+
+Graham Ollis <plicease@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by Graham Ollis.
+
+This software is licensed under the Mozilla Public License Version 1.1
+
+=cut
