@@ -54,15 +54,17 @@ sub bug_format_comment
   my($self, $args) = @_;
   
   push @{ $args->{'regexes'} }, {
-    match   => qr{\bgit commit (\S+) ([0-9a-f]{40})\b},
+    match   => qr{\bgit (commit|branch|tag) (\S+) (\S+)},
     replace => sub {
-      my($args)      = @_;
-      my $name       = html_quote $args->{matches}->[0];
-      my $git_id     = $args->{matches}->[1];
-      my $commit_url = _config->{urls}->{$name}->{commit};
-      my $repo_url   = _config->{urls}->{$name}->{repo};
-      return qq{git commit $name $git_id [ ERROR BAD COMPONENT ]} unless defined $commit_url && defined $repo_url;
-      return qq{git commit <a href="$repo_url" target="_blank">$name</a> <a href="$commit_url/$git_id" target="_blank">$git_id</a>};
+      my $match    = shift->{matches};
+      my $type     = $match->[0];
+      my $ci       = html_quote $match->[1];
+      my $ref      = html_quote $match->[2];
+      my $tmpl     = _config->{url}->{$ci}->{$type};
+      my $repo_url = _config->{url}->{$ci}->{repo};
+      return qq{git $type $ci $ref [ not found ]} unless defined $repo_url && defined $tmpl;
+      my $ref_url  = sprintf $tmpl, $ref;
+      return qq{git $type <a href="$repo_url" target="_blank">$ci</a> <a href="$ref_url" target="_blank">$ref</a>};
     },
   };
 }
