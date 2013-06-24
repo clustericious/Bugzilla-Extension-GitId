@@ -34,14 +34,15 @@ our $VERSION = '0.01';
 sub _config
 {
   state $config;
-  state $filename = $ENV{BUGZILLA_EXTENSION_GITID} // '/etc/gitid.yml';
+  state $filename = $ENV{BUGZILLA_EXTENSION_GITID_CONF} // '/etc/gitid.yml';
   state $timestamp;
   
-  my $new_timestamp = stat($filename)->mtime;
+  my $new_timestamp = eval { stat($filename)->mtime };
   
   if((!defined $config) || $new_timestamp != $timestamp)
   {
-    $config = YAML::LoadFile($filename);
+    $config = eval { YAML::LoadFile($filename) };
+    return {} if $@;
     $timestamp = $new_timestamp;
   }
   
