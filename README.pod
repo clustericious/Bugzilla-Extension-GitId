@@ -24,7 +24,7 @@ Create a /etc/gitid.yml file that configures the extension
      # for tag %s is replaced by the tag name
      tag: https://github.com/plicease/Bugzilla-Extension-GitId/tree/%s
 
-If you don't have write access to /etc/gitid.yml, and set
+If you don't have write access to /etc/gitid.yml, then set
 BUGZILLA_EXTENSION_GITID_CONF in your httpd.conf:
 
  SetEnv BUGZILLA_EXTENSION_GITID_CONF /home/ollisg/etc/gitid.yml
