@@ -25,7 +25,7 @@ use strict;
 use constant NAME => 'GitId';
 
 use constant REQUIRED_MODULES => [
-  { package => 'YAML', module => 'YAML', version => 0, },
+  { package => 'YAML::XS', module => 'YAML::XS', version => 0, },
 ];
 
 use constant OPTIONAL_MODULES => [

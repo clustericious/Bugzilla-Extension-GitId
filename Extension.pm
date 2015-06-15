@@ -27,7 +27,7 @@ use v5.10;
 use base qw(Bugzilla::Extension);
 use Bugzilla::Util qw(html_quote);
 use File::stat qw( stat );
-use YAML ();
+use YAML::XS ();
 
 =head1 NAME
 
@@ -96,7 +96,7 @@ sub _config
   
   if((!defined $config) || $new_timestamp != $timestamp)
   {
-    $config = eval { YAML::LoadFile($filename) };
+    $config = eval { YAML::XS::LoadFile($filename) };
     return {} if $@;
     $timestamp = $new_timestamp;
   }
